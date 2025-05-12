@@ -71,22 +71,25 @@ def registrer_vare():
     input("trykk 1 for å gå tilbake til menyen: ")
     printMeny()
     
-    
-    
-#redigere vare
+#REDIGERE VARE HOVER
 def rediger_vare():
     print("---REDIGERING av varer---")
     print("*1. Tilbake til meny,")
     print("*2. Rediger antall.")
-    print("*2. Rediger varenummer.")
-    print("*2. Rediger Pris.")
+    print("*3. Rediger varenummer.")
+    print("*4. Rediger Pris.")
     RedigerMENY = input("\nVelg handling: ")
     
     if RedigerMENY == "1":
         printMeny()
     if RedigerMENY == "2":
         AntallMeny()
-
+    if RedigerMENY == "3":
+        VarenummerMeny()
+    if RedigerMENY == "4":
+        PrisMeny()
+        
+#REDIGERE VARE  ANTALL
 def AntallMeny():
     søk = input("Spor hvilken vare du vil endre via Navn: ")
     time.sleep(2)
@@ -96,47 +99,94 @@ def AntallMeny():
             #Print total antall funnet ved navn
             print("{varenummer}  {navn} {antall}".format(**vare)) # viser bare varenummer, navn og antall ikke pris, osv
             funnet = True # prints details, matches it, marks
-            nytt_antall = input("Velg nytt antall: ")
+            nytt_antall = input("Velg nytt antall: ") #bruker nytt antall på alle for å redigere pris osv
             for vare in lagersystem["vareliste"]:
                 if vare["navn"].lower() == søk.lower():
                     vare["antall"] = nytt_antall
             with open("output.json", "w") as f:
                 json.dump(lagersystem, f)
-                print(f"Endrett nytt antall er {nytt_antall} til {søk}")
+                print(f"Endrett nytt antall er {nytt_antall} til {søk}") #bruker nytt antall på alle for å redigere pris osv
     if not funnet:
         print("Ingen varer funnet med navn: ", søk)
     time.sleep(2)
-    spor = input("trykk 1, for meny, 2 for spore annen vare: ")
+    spor = input("\ntrykk 1, for meny, 2 for spore annen vare: ")
     if spor == "1":
         printMeny()
     if spor == "2":
-        AntallMeny()
-        
-    pass
+        rediger_vare()
+
+#REDIGERE VARE  VARENUMMER
 def VarenummerMeny():
-    pass
-
+    søk = input("Spor hvilken vare du vil endre varenummer via Navn: ")
+    time.sleep(2)
+    funnet = False
+    for vare in lagersystem["vareliste"]:
+        if søk.lower() == vare["navn"].lower(): # "søk.lower() vare etc .lower()" ANY word that has same in it, "[navn]søk.lower() == søk.lower():" SPECIFIC SAMME FYF
+            #Print total antall funnet ved navn
+            print("{varenummer}  {navn} {antall}".format(**vare)) # viser bare varenummer, navn og antall ikke pris, osv
+            funnet = True # prints details, matches it, marks
+            nytt_antall = input("Velg nytt antall: ") #bruker nytt antall på alle for å redigere pris osv
+            for vare in lagersystem["vareliste"]:
+                if vare["navn"].lower() == søk.lower():
+                    vare["varenummer"] = nytt_antall
+            with open("output.json", "w") as f:
+                json.dump(lagersystem, f)
+                print(f"Endrett nytt antall er {nytt_antall} til {søk}") #bruker nytt antall på alle for å redigere pris osv
+    if not funnet:
+        print("Ingen varer funnet med navn: ", søk)
+    time.sleep(2)
+    spor = input("\ntrykk 1, for meny, 2 for spore annen vare: ")
+    if spor == "1":
+        printMeny()
+    if spor == "2":
+        rediger_vare()
+        
+#REDIGERE VARE  PRIS
 def PrisMeny():
-    
-    pass
+    søk = input("Spor hvilken vare du vil endre pris via NAVN: ")
+    time.sleep(2)
+    funnet = False
+    for vare in lagersystem["vareliste"]:
+        if søk.lower() == vare["navn"].lower(): # "søk.lower() vare etc .lower()" ANY word that has same in it, "[navn]søk.lower() == søk.lower():" SPECIFIC SAMME FYF
+            #Print total antall funnet ved navn
+            print("{varenummer}  {navn} {antall} {pris}".format(**vare)) # viser bare varenummer, navn og antall og pris bareher pga prismeny etc, osv
+            funnet = True # prints details, matches it, marks
+            nytt_antall = input("Velg nytt antall: ") #bruker nytt antall på alle for å redigere pris osv
+            for vare in lagersystem["vareliste"]:
+                if vare["navn"].lower() == søk.lower():
+                    vare["pris"] = nytt_antall #bruker nytt antall på alle for å redigere pris osv
+            with open("output.json", "w") as f:
+                json.dump(lagersystem, f)
+                print(f"Endrett, ny pris er {nytt_antall} til {søk}") #bruker nytt antall på alle for å redigere pris osv
+    if not funnet:
+        print("Ingen varer funnet med navn: ", søk)
+    time.sleep(2)
+    spor = input("\ntrykk 1, for meny, 2 for spore annen vare: ")
+    if spor == "1":
+        printMeny()
+    if spor == "2":
+        rediger_vare()
 
-#slett vare    
+#SLETT VARE    
 def slett_vare():
     print("**SLETTING AV VARER**")
     print("*1. Tilbake til meny,")
     print("*2. Slett Vare.")
     slettINT = input("\nVelg handling: ")
     
-    if slettINT == "1":
+    if not slettet:
+        print("Ingen varer funnet med navn: ")
+    time.sleep(2)
+    spor = input("\ntrykk 1, for meny, 2 for sletting av vare: ")
+    if spor == "1":
         printMeny()
-    if slettINT == "2":
-        slettVareMeny()
-        
+    if spor == "2":
+        slett_vare()
         
 def slettVareMeny(): 
     print("\n**SLETTING AV VARER**")
     print("*1. Tilbake til meny,")
-    print("*2. Skriv inn navn til vare for sletting.")
+    print("*2. Skriv inn varenummer til vare for sletting.")
     slett = input("\nHandling: ")
     
     if slett == "1":
@@ -144,7 +194,7 @@ def slettVareMeny():
     else:
         found = False
         for vare in lagersystem["vareliste"]:
-            if slett.lower() == vare["navn"].lower():
+            if slett.lower() == vare["varenummer"].lower():
                 lagersystem["vareliste"].remove(vare)
                 print(f"\n***{slett} er slettet***")
                 found = True
@@ -152,20 +202,17 @@ def slettVareMeny():
                     json.dump(lagersystem, f)
         time.sleep(2)
         if found == False:
-            print(f"\nFant ingen vare med navn '{slett}'.")    
+            print(f"\nFant ingen vare med varenummer '{slett}'.")    
         slettVareMeny()
-            
-
-
-
+        
 #lager
 def vis_lager(): # Lager def -----------------------
     output = "" #noe for noe
     for item in lagersystem["vareliste"]:
         output += f"Varenummer: {item['varenummer']}, Navn: {item['navn']}, Kategori: {item['kategori']}, Pris: {item['pris']}, Antall: {item['antall']}\n"
 
-    total = len(lagersystem["vareliste"]) # viser totalt hvor mye varer vi har i totalt
-    print("antall varer totalt:", total) #Printer hvor mange varer altså Antallet av hver vare, så hvis 2 varer, printer 2 varer
+    total = len(lagersystem["\nvareliste"]) # viser totalt hvor mye varer vi har i totalt
+    print("\nantall varer totalt:", total) #Printer hvor mange varer altså Antallet av hver vare, så hvis 2 varer, printer 2 varer
     
     print(output) #printer OUTPUT, altså hele lageret sortert.
     
